@@ -17,16 +17,24 @@ namespace PublicApi.Controllers
         }
 
         [HttpPost("CreateContianer")]
-        public async Task<IActionResult> CreateContainer(CreateContainetRequestModel requestModel, string containerName, CancellationToken cs)
+        public async Task<IActionResult> CreateContainer(CreateContainerRequestModel requestModel, string containerName, CancellationToken cs)
         {
-            HttpClient httpClient = _httpClientFactory.CreateClient("DockerClient");
-            HttpContent content = new StringContent(JsonConvert.SerializeObject(requestModel), System.Text.Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await httpClient.PostAsync($"/containers/create?name={containerName}", content, cs);
+            try
+            {
+                HttpClient httpClient = _httpClientFactory.CreateClient("DockerClient");
+                HttpContent content = new StringContent(JsonConvert.SerializeObject(requestModel), System.Text.Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await httpClient.PostAsync($"/containers/create?name={containerName}", content, cs);
 
-            response.EnsureSuccessStatusCode();
-            string jsonStr = await response.Content.ReadAsStringAsync(cs);
+                response.EnsureSuccessStatusCode();
+                string jsonStr = await response.Content.ReadAsStringAsync(cs);
 
-            return Ok(jsonStr);
+                var model = JsonConvert.DeserializeObject<CreateContainerResponseModel>(jsonStr);
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.ToString());
+            }
         }
     }
 }
