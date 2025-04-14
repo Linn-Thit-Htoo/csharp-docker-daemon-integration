@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PublicApi.Models;
+using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PublicApi.Controllers
 {
@@ -29,11 +31,31 @@ namespace PublicApi.Controllers
                 string jsonStr = await response.Content.ReadAsStringAsync(cs);
 
                 var model = JsonConvert.DeserializeObject<CreateContainerResponseModel>(jsonStr);
+                
+                if (model is not null)
+                {
+                    await StartContainerAsync(model.Id);
+                }
+
                 return Ok(model);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.ToString());
+            }
+        }
+
+        private async Task StartContainerAsync(string containerId)
+        {
+            try
+            {
+                HttpClient httpClient = _httpClientFactory.CreateClient("DockerClient");
+                HttpResponseMessage response = await httpClient.PostAsync($"/containers/{containerId}/start", null!);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
     }
