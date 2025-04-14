@@ -2,7 +2,7 @@
 {
     public class CreateContainetRequestModel
     {
-        public string ContainterName { get; set; }
         public string HostName { get; set; }
+        public string Image { get; set; }
     }
 }
