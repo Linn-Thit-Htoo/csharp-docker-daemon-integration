@@ -24,7 +24,23 @@ namespace PublicApi.Controllers
             try
             {
                 HttpClient httpClient = _httpClientFactory.CreateClient("DockerClient");
-                HttpContent content = new StringContent(JsonConvert.SerializeObject(requestModel), System.Text.Encoding.UTF8, "application/json");
+
+                var containerConfig = new
+                {
+                    Image = requestModel.Image,
+                    Env = new[]
+                    {
+                        "ASPNETCORE_ENVIRONMENT=Staging"
+                    },
+                    HostConfig = new
+                    {
+                        AutoRemove = true
+                    },
+                    HostName = requestModel.HostName
+                };
+
+
+                HttpContent content = new StringContent(JsonConvert.SerializeObject(containerConfig), System.Text.Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await httpClient.PostAsync($"/containers/create?name={containerName}", content, cs);
 
                 response.EnsureSuccessStatusCode();
