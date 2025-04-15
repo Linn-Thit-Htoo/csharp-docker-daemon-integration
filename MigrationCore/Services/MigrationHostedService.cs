@@ -1,50 +1,49 @@
 ﻿using EFCore.BulkExtensions;
 using MigrationCore.AppDbContextModels;
 
-namespace MigrationCore.Services
+namespace MigrationCore.Services;
+
+public class MigrationHostedService : IHostedService
 {
-    public class MigrationHostedService : IHostedService
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly ILogger<MigrationHostedService> _logger;
+
+    public MigrationHostedService(IServiceScopeFactory serviceScopeFactory, ILogger<MigrationHostedService> logger)
     {
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly ILogger<MigrationHostedService> _logger;
+        _serviceScopeFactory = serviceScopeFactory;
+        _logger = logger;
+    }
 
-        public MigrationHostedService(IServiceScopeFactory serviceScopeFactory, ILogger<MigrationHostedService> logger)
+    public async Task StartAsync(CancellationToken cancellationToken)
+    {
+        try
         {
-            _serviceScopeFactory = serviceScopeFactory;
-            _logger = logger;
-        }
+            var lst = new List<TblBlog>();
+            var scope = _serviceScopeFactory.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        public async Task StartAsync(CancellationToken cancellationToken)
-        {
-            try
+            for (int i = 1; i <= 20000; i++)
             {
-                var lst = new List<TblBlog>();
-                var scope = _serviceScopeFactory.CreateScope();
-                var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-                for (int i = 1; i <= 20000; i++)
+                lst.Add(new TblBlog()
                 {
-                    lst.Add(new TblBlog()
-                    {
-                        BlogId = Guid.NewGuid().ToString(),
-                        BlogTitle = $"Blog Title {i}",
-                        BlogAuthor = $"Blog Author: {i}",
-                        BlogContent = $"Blog Content: {i}",
-                        IsDeleted = false
-                    });
-                }
+                    BlogId = Guid.NewGuid().ToString(),
+                    BlogTitle = $"Blog Title {i}",
+                    BlogAuthor = $"Blog Author: {i}",
+                    BlogContent = $"Blog Content: {i}",
+                    IsDeleted = false
+                });
+            }
 
-                await context.BulkInsertAsync(lst, cancellationToken: cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.ToString());
-            }
+            await context.BulkInsertAsync(lst, cancellationToken: cancellationToken);
         }
-
-        public Task StopAsync(CancellationToken cancellationToken)
+        catch (Exception ex)
         {
-            throw new NotImplementedException();
+            _logger.LogError(ex.ToString());
         }
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 }
