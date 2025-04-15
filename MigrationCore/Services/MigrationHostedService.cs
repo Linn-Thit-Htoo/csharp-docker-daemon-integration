@@ -8,7 +8,10 @@ public class MigrationHostedService : IHostedService
     private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly ILogger<MigrationHostedService> _logger;
 
-    public MigrationHostedService(IServiceScopeFactory serviceScopeFactory, ILogger<MigrationHostedService> logger)
+    public MigrationHostedService(
+        IServiceScopeFactory serviceScopeFactory,
+        ILogger<MigrationHostedService> logger
+    )
     {
         _serviceScopeFactory = serviceScopeFactory;
         _logger = logger;
@@ -24,14 +27,16 @@ public class MigrationHostedService : IHostedService
 
             for (int i = 1; i <= 20000; i++)
             {
-                lst.Add(new TblBlog()
-                {
-                    BlogId = Guid.NewGuid().ToString(),
-                    BlogTitle = $"Blog Title {i}",
-                    BlogAuthor = $"Blog Author: {i}",
-                    BlogContent = $"Blog Content: {i}",
-                    IsDeleted = false
-                });
+                lst.Add(
+                    new TblBlog()
+                    {
+                        BlogId = Guid.NewGuid().ToString(),
+                        BlogTitle = $"Blog Title {i}",
+                        BlogAuthor = $"Blog Author: {i}",
+                        BlogContent = $"Blog Content: {i}",
+                        IsDeleted = false,
+                    }
+                );
             }
 
             await context.BulkInsertAsync(lst, cancellationToken: cancellationToken);
