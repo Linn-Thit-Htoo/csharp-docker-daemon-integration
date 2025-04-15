@@ -1,5 +1,4 @@
 ﻿using EFCore.BulkExtensions;
-using Microsoft.EntityFrameworkCore;
 using MigrationCore.AppDbContextModels;
 
 namespace MigrationCore.Services
