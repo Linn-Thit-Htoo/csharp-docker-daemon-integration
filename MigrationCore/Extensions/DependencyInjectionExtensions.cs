@@ -5,13 +5,18 @@ using MigrationCore.Services;
 namespace MigrationCore.Extensions;
 
 public static class DependencyInjectionExtensions
-{ 
-    public static IServiceCollection AddDependencies(this IServiceCollection services, WebApplicationBuilder builder)
+{
+    public static IServiceCollection AddDependencies(
+        this IServiceCollection services,
+        WebApplicationBuilder builder
+    )
     {
-        builder.Services.AddControllers().AddJsonOptions(opt =>
-        {
-            opt.JsonSerializerOptions.PropertyNamingPolicy = null;
-        });
+        builder
+            .Services.AddControllers()
+            .AddJsonOptions(opt =>
+            {
+                opt.JsonSerializerOptions.PropertyNamingPolicy = null;
+            });
 
         builder.Services.AddDbContext<AppDbContext>(opt =>
         {
