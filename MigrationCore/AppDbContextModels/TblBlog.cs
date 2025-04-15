@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-
+﻿
 namespace MigrationCore.AppDbContextModels;
 
 public partial class TblBlog
