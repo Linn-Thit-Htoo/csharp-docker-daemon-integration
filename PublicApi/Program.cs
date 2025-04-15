@@ -4,10 +4,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddHttpClient("DockerClient", opt =>
-{
-    opt.BaseAddress = new Uri("http://localhost:5555");
-});
+builder.Services.AddHttpClient(
+    "DockerClient",
+    opt =>
+    {
+        opt.BaseAddress = new Uri("http://localhost:5555");
+    }
+);
 
 var app = builder.Build();
 
