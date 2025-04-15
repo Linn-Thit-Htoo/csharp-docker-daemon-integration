@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PublicApi.Models;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace PublicApi.Controllers
 {
