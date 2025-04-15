@@ -1,16 +1,8 @@
+using PublicApi.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddHttpClient(
-    "DockerClient",
-    opt =>
-    {
-        opt.BaseAddress = new Uri("http://localhost:5555");
-    }
-);
+builder.Services.AddDependencies(builder);
 
 var app = builder.Build();
 
@@ -21,6 +13,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseHealthChecks("/health");
 
 app.UseAuthorization();
 
