@@ -1,8 +1,7 @@
-﻿namespace PublicApi.Models
+﻿namespace PublicApi.Models;
+
+public class CreateContainerResponseModel
 {
-    public class CreateContainerResponseModel
-    {
-        public string Id { get; set; }
-        public List<string> Warnigns { get; set; }
-    }
+    public string Id { get; set; }
+    public List<string> Warnigns { get; set; }
 }
