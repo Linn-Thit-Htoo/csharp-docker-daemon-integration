@@ -1,5 +1,4 @@
-﻿
-namespace MigrationCore.AppDbContextModels;
+﻿namespace MigrationCore.AppDbContextModels;
 
 public partial class TblBlog
 {
