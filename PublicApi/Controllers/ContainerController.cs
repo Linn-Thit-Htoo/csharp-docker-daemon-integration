@@ -15,7 +15,7 @@ public class ContainerController : ControllerBase
         _httpClientFactory = httpClientFactory;
     }
 
-    [HttpPost("CreateContianer")]
+    [HttpPost("CreateContainer")]
     public async Task<IActionResult> CreateContainer(
         CreateContainerRequestModel requestModel,
         string containerName,
